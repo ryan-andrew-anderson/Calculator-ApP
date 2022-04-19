@@ -20,23 +20,22 @@ class ViewController: UIViewController {
         isFinishedtypingNumber = true
         
         guard
-            let number = Double(displayLabel.text!),
+            var number = Double(displayLabel.text!),
             let calcMethod = sender.currentTitle
+//                ,calcMethod.contains("..") == false
         else { fatalError("Cannotconvert display label text to a double") }
         
         switch calcMethod {
             
         case ("+/-"):
-            displayLabel.text = String(-number)
-            print(number)
+            displayLabel.text = String(number * -1)
             
         case ("AC"):
             displayLabel.text = "0"
-            print(number)
+//            number = 0
             
         case ("%"):
-            displayLabel.text = String(number/10)
-            print(number)
+            displayLabel.text = String(number/100)
             
         default:
             print("Error with \(calcMethod) Button")
@@ -46,6 +45,9 @@ class ViewController: UIViewController {
     @IBAction func numButtonPressed(_ sender: UIButton) {
         
         //What should happen when a number is entered into the keypad
+//        if displayLabel.text?.contains("..") == true {
+//            print("invald input")
+//        }
         
         if let numValue = sender.currentTitle {
             
@@ -53,6 +55,16 @@ class ViewController: UIViewController {
                 displayLabel.text = numValue
                 isFinishedtypingNumber = false
             } else {
+                if numValue == "." {
+                    guard let currentDisplayValue = Double(displayLabel.text!) else {
+                        fatalError("cannot display label text to a Double")
+                    }
+                    let isInt = floor(currentDisplayValue) == currentDisplayValue
+                    
+                    if !isInt {
+                        return
+                    }
+                }
                 displayLabel.text = displayLabel.text! + numValue
             }
         }
