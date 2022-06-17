@@ -11,6 +11,8 @@ class ViewController: UIViewController {
     
     private var isFinishedTypingNumber: Bool = true
     
+    private var calculator = CalculatorLogic()
+
     private var displayValue: Double {
         
         get {
@@ -27,21 +29,19 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var displayLabel: UILabel!
-    
+
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         
         guard let calcMethod = sender.currentTitle else { return }
         
         isFinishedTypingNumber = true
         
-        let calculator = CalculatorLogic(number: displayValue)
+        calculator.setNumber(displayValue)
         
-        guard let result = calculator.calculate(symbol: calcMethod) else {
-            fatalError("the result of the calculation is nil")
+        if let result = calculator.calculate(symbol: calcMethod) {
+            
+            displayValue = result
         }
-        
-        displayValue = result
-        
     }
     
     @IBAction func numButtonPressed(_ sender: UIButton) {
